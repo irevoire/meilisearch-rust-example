@@ -1,0 +1,13 @@
+/Users/a1/Projects/meilisearch-rust-example/cli/target/debug/deps/unicode_bidi-1542c6fc9709b799.rmeta: /Users/a1/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-bidi-0.3.7/src/lib.rs /Users/a1/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-bidi-0.3.7/src/deprecated.rs /Users/a1/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-bidi-0.3.7/src/format_chars.rs /Users/a1/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-bidi-0.3.7/src/level.rs /Users/a1/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-bidi-0.3.7/src/char_data/mod.rs /Users/a1/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-bidi-0.3.7/src/char_data/tables.rs /Users/a1/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-bidi-0.3.7/src/explicit.rs /Users/a1/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-bidi-0.3.7/src/implicit.rs /Users/a1/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-bidi-0.3.7/src/prepare.rs
+
+/Users/a1/Projects/meilisearch-rust-example/cli/target/debug/deps/unicode_bidi-1542c6fc9709b799.d: /Users/a1/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-bidi-0.3.7/src/lib.rs /Users/a1/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-bidi-0.3.7/src/deprecated.rs /Users/a1/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-bidi-0.3.7/src/format_chars.rs /Users/a1/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-bidi-0.3.7/src/level.rs /Users/a1/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-bidi-0.3.7/src/char_data/mod.rs /Users/a1/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-bidi-0.3.7/src/char_data/tables.rs /Users/a1/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-bidi-0.3.7/src/explicit.rs /Users/a1/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-bidi-0.3.7/src/implicit.rs /Users/a1/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-bidi-0.3.7/src/prepare.rs
+
+/Users/a1/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-bidi-0.3.7/src/lib.rs:
+/Users/a1/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-bidi-0.3.7/src/deprecated.rs:
+/Users/a1/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-bidi-0.3.7/src/format_chars.rs:
+/Users/a1/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-bidi-0.3.7/src/level.rs:
+/Users/a1/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-bidi-0.3.7/src/char_data/mod.rs:
+/Users/a1/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-bidi-0.3.7/src/char_data/tables.rs:
+/Users/a1/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-bidi-0.3.7/src/explicit.rs:
+/Users/a1/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-bidi-0.3.7/src/implicit.rs:
+/Users/a1/.cargo/registry/src/github.com-1ecc6299db9ec823/unicode-bidi-0.3.7/src/prepare.rs:
