@@ -6,8 +6,10 @@ use std::fmt;
 use std::fs::File;
 use std::io::{stdin, Read};
 
+/*
+instantiate the client. 
+*/
 lazy_static! {
-    /// This is an example for using doc comment attributes
     static ref CLIENT:Client = Client::new("http://localhost:7700", "masterKey");
 }
 
@@ -31,6 +33,7 @@ fn main() {
                 }
             }
         }
+        let _ = CLIENT.delete_index("clothes").await.unwrap();
     })
 }
 
@@ -43,8 +46,10 @@ async fn search(query: &str) {
         .await
         .unwrap()
         .hits;
+
     for clothes in query_results {
-        println!("{:?}", clothes.result);
+        let display = clothes.result;
+        println!("{}",format!("{}", display));
     }
 }
 /*
@@ -58,11 +63,14 @@ async fn build_index() {
     // reading and parsing the filed
     let mut file = File::open("../assets/clothes.json").unwrap();
     let mut content = String::new();
+
     file.read_to_string(&mut content).unwrap();
+
     let clothes: Vec<Clothes> = serde_json::from_str(&content).unwrap();
     let displayed_attributes = ["article", "cost", "size", "pattern"];
-    let ranking_rules = ["words", "typo", "attribute", "exactness", "rank:desc"];
+    let ranking_rules = ["cost","words", "typo", "attribute", "exactness", "rank:asc"];
     let mut synonyms = std::collections::HashMap::new();
+
     synonyms.insert(
         String::from("sweater"),
         vec![String::from("sweatshirt"), String::from("long-sleeve")],
@@ -73,17 +81,27 @@ async fn build_index() {
         vec![String::from("tees"), String::from("tshirt")],
     );
 
-    // what kind of
-    CLIENT
+    /*
+    set up the synonyms with the client
+    */
+    let _ = CLIENT
         .index("clothes")
         .set_synonyms(&synonyms)
         .await
         .unwrap();
-    CLIENT
+    
+        /*
+     add the documents
+    */
+    let _ = CLIENT
         .index("clothes")
         .add_or_update(&clothes, Some("id"))
         .await
         .unwrap();
+
+    /*
+    pick which attributes
+    */
     let _ = CLIENT
         .index("clothes")
         .set_displayed_attributes(displayed_attributes);
@@ -129,7 +147,7 @@ impl fmt::Display for ClothesDisplay {
         // is very similar to `println!`.
         write!(
             f,
-            "article {},\n price {},\n size {},\n pattern {}",
+            "\nresult\n article: {},\n price: {},\n size: {},\n pattern: {}\n",
             self.article, self.cost, self.size, self.pattern
         )
     }
