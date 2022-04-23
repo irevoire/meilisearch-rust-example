@@ -7,15 +7,22 @@ use std::fs::File;
 use std::io::{stdin, Read};
 
 /*
-instantiate the client. 
+instantiate the client. load it once
 */
 lazy_static! {
-    static ref CLIENT:Client = Client::new("http://localhost:7700", "masterKey");
+    static ref CLIENT: Client = Client::new("http://localhost:7700", "masterKey");
 }
 
 fn main() {
     block_on(async move {
+        /*
+        build the index
+        */
         build_index().await;
+
+        /*
+        enter in search queries or quit
+        */
         loop {
             println!("Enter a search query or type \"q\" or \"quit\" to quit:");
             let mut input_string = String::new();
@@ -33,11 +40,18 @@ fn main() {
                 }
             }
         }
+        /*
+        get rid of the index at the end, doing this only so users don't have the index without knowing
+        */
         let _ = CLIENT.delete_index("clothes").await.unwrap();
     })
 }
 
 async fn search(query: &str) {
+    /*
+    make the search query, which excutes and serializes hits into the
+    ClothesDisplay struct
+     */
     let query_results = CLIENT
         .index("clothes")
         .search()
@@ -47,9 +61,12 @@ async fn search(query: &str) {
         .unwrap()
         .hits;
 
+    /*
+    display the query results
+    */
     for clothes in query_results {
         let display = clothes.result;
-        println!("{}",format!("{}", display));
+        println!("{}", format!("{}", display));
     }
 }
 /*
@@ -63,14 +80,31 @@ async fn build_index() {
     // reading and parsing the filed
     let mut file = File::open("../assets/clothes.json").unwrap();
     let mut content = String::new();
-
     file.read_to_string(&mut content).unwrap();
 
+    /*
+    serialize the string to clothes objects
+    */
     let clothes: Vec<Clothes> = serde_json::from_str(&content).unwrap();
     let displayed_attributes = ["article", "cost", "size", "pattern"];
-    let ranking_rules = ["cost","words", "typo", "attribute", "exactness", "rank:asc"];
-    let mut synonyms = std::collections::HashMap::new();
 
+    /*
+    Create ranking rules
+    Question: is this the way to do it?
+    */
+    let ranking_rules = [
+        "cost",
+        "words",
+        "typo",
+        "attribute",
+        "exactness",
+        "rank:asc",
+    ];
+
+    /*
+    create the synonyms hashmap
+    */
+    let mut synonyms = std::collections::HashMap::new();
     synonyms.insert(
         String::from("sweater"),
         vec![String::from("sweatshirt"), String::from("long-sleeve")],
@@ -89,8 +123,8 @@ async fn build_index() {
         .set_synonyms(&synonyms)
         .await
         .unwrap();
-    
-        /*
+
+    /*
      add the documents
     */
     let _ = CLIENT
@@ -100,11 +134,15 @@ async fn build_index() {
         .unwrap();
 
     /*
-    pick which attributes
+    set displayed attributes
     */
     let _ = CLIENT
         .index("clothes")
         .set_displayed_attributes(displayed_attributes);
+
+    /*
+       set the ranking rules for the index
+    */
     let _ = CLIENT
         .index("clothes")
         .set_ranking_rules(&ranking_rules)
@@ -112,7 +150,10 @@ async fn build_index() {
         .unwrap();
 }
 
-#[derive(Serialize,Deserialize, Debug)]
+/*
+base search object.
+*/
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Clothes {
     id: usize,
     seaon: String,
@@ -130,7 +171,10 @@ impl Document for Clothes {
     }
 }
 
-#[derive(Serialize,Deserialize, Debug)]
+/*
+search results get serialized to this struct
+*/
+#[derive(Serialize, Deserialize, Debug)]
 pub struct ClothesDisplay {
     article: String,
     cost: f32,
