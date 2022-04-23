@@ -64,15 +64,18 @@ async fn search(query: &str) {
     /*
     display the query results
     */
-    for clothes in query_results {
-        let display = clothes.result;
-        println!("{}", format!("{}", display));
+    if query_results.len() > 1{
+        for clothes in query_results {
+            let display = clothes.result;
+            println!("{}", format!("{}", display));
+        }
+    }else{
+        println!("no results...")
     }
 }
+
 /*
 TODO:
-Set display settings,
-Ranking results
 sort by price
 add filter?
 */
@@ -100,6 +103,14 @@ async fn build_index() {
         "exactness",
         "rank:asc",
     ];
+
+    let searchable_attributes = [
+        "seaon",
+        "article",
+        "cost",
+        "size",
+        "pattern",
+            ];
 
     /*
     create the synonyms hashmap
@@ -148,6 +159,11 @@ async fn build_index() {
         .set_ranking_rules(&ranking_rules)
         .await
         .unwrap();
+
+    /*
+        set the searchable attributes
+    */
+    let _ = CLIENT.index("clothes").set_searchable_attributes(&searchable_attributes).await.unwrap();
 }
 
 /*
