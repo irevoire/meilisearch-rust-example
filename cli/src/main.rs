@@ -64,7 +64,7 @@ async fn search(query: &str) {
     /*
     display the query results
     */
-    if query_results.len() > 1{
+    if query_results.len() > 0{
         for clothes in query_results {
             let display = clothes.result;
             println!("{}", format!("{}", display));
