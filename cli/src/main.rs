@@ -6,23 +6,17 @@ use std::fmt;
 use std::fs::File;
 use std::io::{stdin, Read};
 
-/*
-instantiate the client. load it once
-*/
+// instantiate the client. load it once
 lazy_static! {
     static ref CLIENT: Client = Client::new("http://localhost:7700", "masterKey");
 }
 
 fn main() {
     block_on(async move {
-        /*
-        build the index
-        */
+        // build the index
         build_index().await;
 
-        /*
-        enter in search queries or quit
-        */
+        // enter in search queries or quit
         loop {
             println!("Enter a search query or type \"q\" or \"quit\" to quit:");
             let mut input_string = String::new();
@@ -40,18 +34,14 @@ fn main() {
                 }
             }
         }
-        /*
-        get rid of the index at the end, doing this only so users don't have the index without knowing
-        */
+        // get rid of the index at the end, doing this only so users don't have the index without knowing
         let _ = CLIENT.delete_index("clothes").await.unwrap();
     })
 }
 
 async fn search(query: &str) {
-    /*
-    make the search query, which excutes and serializes hits into the
-    ClothesDisplay struct
-     */
+    // make the search query, which excutes and serializes hits into the
+    // ClothesDisplay struct
     let query_results = CLIENT
         .index("clothes")
         .search()
@@ -61,15 +51,13 @@ async fn search(query: &str) {
         .unwrap()
         .hits;
 
-    /*
-    display the query results
-    */
-    if query_results.len() > 0{
+    // display the query results
+    if query_results.len() > 0 {
         for clothes in query_results {
             let display = clothes.result;
             println!("{}", format!("{}", display));
         }
-    }else{
+    } else {
         println!("no results...")
     }
 }
@@ -80,21 +68,17 @@ sort by price
 add filter?
 */
 async fn build_index() {
-    // reading and parsing the filed
+    // reading and parsing the file
     let mut file = File::open("../assets/clothes.json").unwrap();
     let mut content = String::new();
     file.read_to_string(&mut content).unwrap();
 
-    /*
-    serialize the string to clothes objects
-    */
+    // serialize the string to clothes objects
     let clothes: Vec<Clothes> = serde_json::from_str(&content).unwrap();
     let displayed_attributes = ["article", "cost", "size", "pattern"];
 
-    /*
-    Create ranking rules
-    Question: is this the way to do it?
-    */
+    // Create ranking rules
+    // Question: is this the way to do it?
     let ranking_rules = [
         "cost",
         "words",
@@ -104,17 +88,9 @@ async fn build_index() {
         "rank:asc",
     ];
 
-    let searchable_attributes = [
-        "seaon",
-        "article",
-        "cost",
-        "size",
-        "pattern",
-            ];
+    let searchable_attributes = ["seaon", "article", "cost", "size", "pattern"];
 
-    /*
-    create the synonyms hashmap
-    */
+    // create the synonyms hashmap
     let mut synonyms = std::collections::HashMap::new();
     synonyms.insert(
         String::from("sweater"),
@@ -126,49 +102,41 @@ async fn build_index() {
         vec![String::from("tees"), String::from("tshirt")],
     );
 
-    /*
-    set up the synonyms with the client
-    */
+    // set up the synonyms with the client
     let _ = CLIENT
         .index("clothes")
         .set_synonyms(&synonyms)
         .await
         .unwrap();
 
-    /*
-     add the documents
-    */
+    // add the documents
     let _ = CLIENT
         .index("clothes")
         .add_or_update(&clothes, Some("id"))
         .await
         .unwrap();
 
-    /*
-    set displayed attributes
-    */
+    // set displayed attributes
     let _ = CLIENT
         .index("clothes")
         .set_displayed_attributes(displayed_attributes);
 
-    /*
-       set the ranking rules for the index
-    */
+    // set the ranking rules for the index
     let _ = CLIENT
         .index("clothes")
         .set_ranking_rules(&ranking_rules)
         .await
         .unwrap();
 
-    /*
-        set the searchable attributes
-    */
-    let _ = CLIENT.index("clothes").set_searchable_attributes(&searchable_attributes).await.unwrap();
+    // set the searchable attributes
+    let _ = CLIENT
+        .index("clothes")
+        .set_searchable_attributes(&searchable_attributes)
+        .await
+        .unwrap();
 }
 
-/*
-base search object.
-*/
+/// Base search object.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Clothes {
     id: usize,
@@ -187,9 +155,7 @@ impl Document for Clothes {
     }
 }
 
-/*
-search results get serialized to this struct
-*/
+/// Search results get serialized to this struct
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ClothesDisplay {
     article: String,
