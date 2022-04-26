@@ -1,5 +1,3 @@
-
-
 [
     {
     "id": 1,
@@ -72,13 +70,5 @@
     "cost": 634,
     "size":"L",
     "pattern":"camo"
-  },
-  {
-    "id": 1,
-    "seaon": "spring",
-    "article": "sweatshirt",
-    "cost": 61.78,
-    "size":"M",
-    "pattern":"Striped"
   }
 ]
