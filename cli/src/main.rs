@@ -109,13 +109,6 @@ async fn build_index() {
         .await
         .unwrap();
 
-    // add the documents
-    let _ = CLIENT
-        .index("clothes")
-        .add_or_update(&clothes, Some("id"))
-        .await
-        .unwrap();
-
     // set displayed attributes
     let _ = CLIENT
         .index("clothes")
@@ -134,6 +127,22 @@ async fn build_index() {
         .set_searchable_attributes(&searchable_attributes)
         .await
         .unwrap();
+
+    // add the documents
+    let result = CLIENT
+        .index("clothes")
+        .add_or_update(&clothes, Some("id"))
+        .await
+        .unwrap()
+        .wait_for_completion(&CLIENT, None, None)
+        .await
+        .unwrap();
+    if result.is_failure() {
+        panic!(
+            "Encountered an error while sending the documents: {:?}",
+            result.unwrap_failure()
+        );
+    }
 }
 
 /// Base search object.
